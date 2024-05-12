@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920164429173",
+    "project_id": "algo-ease",
+    "storage_bucket": "algo-ease.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920164429173:android:bcedf72986ade5cc95b73c",
+        "android_client_info": {
+          "package_name": "com.example.algo_ease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQQPcIPb9muPVGXHGvz6DbkJA0CqDWgs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
