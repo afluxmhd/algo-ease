@@ -6,12 +6,13 @@ class Deploy {
   final String modelName;
   final StrategyResponse strategyResponse;
   final String modelDescription;
-  Deploy(
-      {required this.id,
-      required this.uid,
-      required this.modelName,
-      required this.strategyResponse,
-      required this.modelDescription});
+  Deploy({
+    required this.id,
+    required this.uid,
+    required this.modelName,
+    required this.strategyResponse,
+    required this.modelDescription,
+  });
 
   Deploy copyWith({
     String? id,

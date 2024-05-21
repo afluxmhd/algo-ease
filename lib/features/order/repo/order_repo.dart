@@ -5,6 +5,7 @@ import 'package:algo_ease/data/remote/api_client.dart';
 import 'package:algo_ease/data/remote/api_endpoints.dart';
 import 'package:algo_ease/models/order.dart' as stock;
 import 'package:algo_ease/models/stock.dart';
+import 'package:algo_ease/models/strategy_response.dart';
 import 'package:algo_ease/models/suggestion.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -53,9 +54,9 @@ class OrderRepo {
     }
   }
 
-  Future<Stock> fetchStockPrice(String stock) async {
+  Future<Stock> fetchStockPrice(dynamic body) async {
     try {
-      var response = await _apiClient.getData(APIEndpoints.stockDetails(stock));
+      var response = await _apiClient.postData(APIEndpoints.stockDetails, body: body);
       return Stock.fromMap(jsonDecode(response.body));
     } catch (e) {
       throw Exception(e);

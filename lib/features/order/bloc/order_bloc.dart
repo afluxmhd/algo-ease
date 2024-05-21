@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:algo_ease/core/dependencies/service_locator.dart';
 import 'package:algo_ease/enums/order_enums.dart';
+import 'package:algo_ease/enums/strategy_enums.dart';
 import 'package:algo_ease/features/order/repo/order_repo.dart';
 import 'package:algo_ease/models/deploy.dart';
 import 'package:algo_ease/models/order.dart';
@@ -25,8 +26,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderBaseState> {
 
     for (var i = 0; i < orders.length; i++) {
       var order = orders[i];
-      var currentPrice = await _fetchCurrentStockPrice(order.deployModel.strategyResponse.scrip);
+      // var currentPrice = await _fetchCurrentStockPrice(order.deployModel.strategyResponse, order.status);
 
+      var currentPrice = 100.0;
       var status = _getOrderStatus(order.deployModel.strategyResponse, currentPrice);
 
       // Update the order in the orders list directly
@@ -58,8 +60,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderBaseState> {
     await locator.get<OrderRepo>().updateOrder(updateOrder);
   }
 
-  Future<double> _fetchCurrentStockPrice(String stockName) async {
-    var stock = await locator.get<OrderRepo>().fetchStockPrice(stockName);
+  Future<double> _fetchCurrentStockPrice(StrategyResponse deployModel, OrderStatus status) async {
+    var customStockMap = {
+      "scrip": deployModel.scrip,
+      "status": status.toMap().toLowerCase(),
+      "action": deployModel.action.toMap().toLowerCase(),
+      "entry": deployModel.entry,
+      "exit": deployModel.exit,
+    };
+    var stock = await locator.get<OrderRepo>().fetchStockPrice(customStockMap);
     return stock.price;
   }
 

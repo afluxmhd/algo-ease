@@ -7,7 +7,7 @@ import 'package:algo_ease/models/deploy.dart';
 import 'package:algo_ease/models/strategy_description.dart';
 import 'package:algo_ease/models/strategy_response.dart';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 part 'deploy_event.dart';
@@ -18,6 +18,7 @@ class DeployBloc extends Bloc<DeployEvent, DeployBaseState> {
     on<LoadDeployEvent>(loadDeployEvent);
     on<DeployViewModelEvent>(deployViewModelEvent);
     on<DeployModelSaveEvent>(deployModelSaveEvent);
+    on<DeployModelRemoveEvent>(deployModelRemoveEvent);
   }
 
   FutureOr<void> loadDeployEvent(LoadDeployEvent event, Emitter<DeployBaseState> emit) async {
@@ -29,22 +30,36 @@ class DeployBloc extends Bloc<DeployEvent, DeployBaseState> {
 
   FutureOr<void> deployViewModelEvent(DeployViewModelEvent event, Emitter<DeployBaseState> emit) async {
     try {
+      var currentState = state as DeployState;
+      emit(DeployLoadingState());
       var strategyDescription = await locator.get<StrategyRepo>().getStrategyDescription();
       emit(DeployViewModelActionState(deployModel: event.deployModel, strategyDescription: strategyDescription));
+      emit(currentState);
     } catch (e) {
       emit(DeployFailureState(error: e.toString()));
     }
   }
 
   FutureOr<void> deployModelSaveEvent(DeployModelSaveEvent event, Emitter<DeployBaseState> emit) async {
+    var deployId = const Uuid().v1();
+
+    var modelDescription = await locator.get<StrategyRepo>().getModelDescription(event.strategyResponse);
     var deployModel = Deploy(
-        id: const Uuid().v1(),
-        uid: '123',
-        modelName: "NLPMD123",
-        strategyResponse: event.strategyResponse,
-        modelDescription:
-            "The model serves as a comprehensive blueprint for algorithmic trading strategies, offering clarity and precision in decision-making. By defining crucial parameters such as the action (BUY or SELL), security, quantity, entry price, stop loss, maximum loss, and maximum profit thresholds, the model empowers traders to execute well-defined strategies tailored to their risk tolerance and market outlook. This structured approach enhances efficiency in trade execution, aids in risk management by setting predefined loss limits, and allows for systematic evaluation and optimization of trading performance. Ultimately, the model streamlines the translation of trading ideas into actionable plans, facilitating disciplined and strategic trading in dynamic financial markets.");
+      id: const Uuid().v1(),
+      uid: '123',
+      modelName: event.strategyResponse.scrip + deployId.substring(0, 4),
+      strategyResponse: event.strategyResponse,
+      modelDescription: modelDescription.description,
+    );
     await locator.get<DeployRepo>().addDeployModel(deployModel);
     emit(DeploySuccessActionState(success: "Deploy model has been saved "));
+  }
+
+  FutureOr<void> deployModelRemoveEvent(DeployModelRemoveEvent event, Emitter<DeployBaseState> emit) async {
+    await locator.get<DeployRepo>().removeDeployModel(event.id);
+    emit(DeploySuccessActionState(success: "Deploy model has been been removed"));
+    if (event.context.mounted) {
+      Navigator.pop(event.context);
+    }
   }
 }

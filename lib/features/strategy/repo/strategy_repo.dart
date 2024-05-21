@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:algo_ease/core/constants/collections.dart';
 import 'package:algo_ease/data/remote/api_client.dart';
 import 'package:algo_ease/data/remote/api_endpoints.dart';
+import 'package:algo_ease/models/model_description.dart';
 import 'package:algo_ease/models/strategy_description.dart';
 import 'package:algo_ease/models/strategy_request.dart';
 import 'package:algo_ease/models/strategy_response.dart';
@@ -45,7 +46,6 @@ class StrategyRepo {
         APIEndpoints.interpretStrategy,
         body: strategy.toMap(),
       );
-      print(response.body);
       return StrategyResponse.fromServerMap(jsonDecode(response.body));
     } catch (e) {
       throw Exception(e);
@@ -56,6 +56,15 @@ class StrategyRepo {
     try {
       var response = await _apiClient.getData(APIEndpoints.startegyDescription);
       return StrategyDescription.fromMap(jsonDecode(response.body));
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<ModelDescription> getModelDescription(StrategyResponse strategy) async {
+    try {
+      var response = await _apiClient.postData(APIEndpoints.modelDescription, body: strategy.toMap());
+      return ModelDescription.fromMap(jsonDecode(response.body));
     } catch (e) {
       throw Exception(e);
     }

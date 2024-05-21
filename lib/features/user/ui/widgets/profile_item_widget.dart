@@ -10,15 +10,17 @@ class ProfileItem extends StatelessWidget {
     required this.label,
     required this.iconSvg,
     this.trailingLabel,
+    this.onTap,
   });
   final String label;
   final String iconSvg;
   final String? trailingLabel;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12),
         child: Row(

@@ -2,6 +2,7 @@ import 'package:algo_ease/core/dependencies/service_locator.dart';
 import 'package:algo_ease/core/design/components/empty_states.dart';
 import 'package:algo_ease/core/design/components/text.dart';
 import 'package:algo_ease/core/design/shared/colors.dart';
+import 'package:algo_ease/enums/strategy_enums.dart';
 import 'package:algo_ease/features/deploy/bloc/deploy_bloc.dart';
 import 'package:algo_ease/features/deploy/ui/view_deploy_model_page.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,12 @@ class DeployPage extends StatelessWidget {
   DeployPage({super.key});
 
   final bloc = locator<DeployBloc>()..add(LoadDeployEvent());
+
+  String getDeploySubtle(ModelAction action) {
+    var bearish = "The bearish outlook in trading suggests a pessimistic view on the future performance of an asset";
+    var bullish = "The bullish prompt in trading indicates an expectation for the price of an asset to rise";
+    return action == ModelAction.buy ? bullish : bearish;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +81,7 @@ class DeployPage extends StatelessWidget {
                                   AppText.bodyThreeMedium(state.deployModels[index].modelName),
                                   const SizedBox(height: 6),
                                   AppText.captionTwoRegular(
-                                    "The bullish prompt in trading indicates an expectation for the price of an asset to rise.",
+                                    getDeploySubtle(state.deployModels[index].strategyResponse.action),
                                     textAlign: TextAlign.center,
                                     color: AppColors.subTextColor,
                                   ),

@@ -17,3 +17,9 @@ class DeployModelSaveEvent extends DeployEvent {
   final StrategyResponse strategyResponse;
   DeployModelSaveEvent({required this.strategyResponse});
 }
+
+class DeployModelRemoveEvent extends DeployEvent {
+  final String id;
+  final BuildContext context;
+  DeployModelRemoveEvent({required this.id, required this.context});
+}

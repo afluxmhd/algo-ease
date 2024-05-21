@@ -6,6 +6,7 @@ import 'package:algo_ease/core/design/components/snackbar.dart';
 import 'package:algo_ease/core/design/components/text.dart';
 import 'package:algo_ease/core/design/shared/colors.dart';
 import 'package:algo_ease/extension/string_extensions.dart';
+import 'package:algo_ease/features/deploy/bloc/deploy_bloc.dart';
 import 'package:algo_ease/features/order/bloc/order_bloc.dart';
 import 'package:algo_ease/models/deploy.dart';
 import 'package:algo_ease/models/strategy_description.dart';
@@ -32,6 +33,16 @@ class ViewDeployModelPage extends StatelessWidget {
           centerTitle: true,
           backgroundColor: AppColors.primaryColor,
           title: AppText.headingThreeMedium("Model"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  locator.get<DeployBloc>().add(DeployModelRemoveEvent(id: deployModel.id, context: context));
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: AppColors.errorColor,
+                )),
+          ],
         ),
         body: BlocListener<OrderBloc, OrderBaseState>(
           bloc: locator.get<OrderBloc>(),

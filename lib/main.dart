@@ -1,5 +1,6 @@
 import 'package:algo_ease/core/design/shared/theme.dart';
 import 'package:algo_ease/features/auth/ui/login_page.dart';
+import 'package:algo_ease/features/auth/ui/splash_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         title: 'AlgoEase',
         theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: const SplashPage(),
       ),
     );
   }

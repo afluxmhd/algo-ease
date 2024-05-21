@@ -34,6 +34,14 @@ class DeployRepo {
     }
   }
 
+  Future<void> removeDeployModel(String id) {
+    try {
+      return _deploy.doc(id).delete();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Deploy> getDeployModelById(String id) {
     try {
       return _deploy

@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepo {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth;
+
+  AuthRepo({
+    required FirebaseAuth auth,
+  }) : _auth = auth;
 
   Future<User?> signIn(String email, String password) async {
     try {
@@ -11,8 +15,7 @@ class AuthRepo {
       );
       return userCredential.user;
     } catch (e) {
-      print("Error signing in: $e");
-      return null;
+      throw Exception(e);
     }
   }
 
@@ -24,8 +27,7 @@ class AuthRepo {
       );
       return userCredential.user;
     } catch (e) {
-      print("Error registering: $e");
-      return null;
+      throw Exception(e);
     }
   }
 
@@ -34,8 +36,15 @@ class AuthRepo {
       User? user = _auth.currentUser;
       return user;
     } catch (e) {
-      print("Error getting current user: $e");
-      return null;
+      throw Exception(e);
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }
